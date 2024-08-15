@@ -1,17 +1,20 @@
-using Fina.Api.Data;
-using Fina.Api.Handlers;
-using Fina.Core.Handler;
-using Microsoft.EntityFrameworkCore;
+using Fina.Api;
+using Fina.Api.Common.Api;
+using Fina.Api.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.AddDataContexts();
+builder.AddCrossOrigin();
+builder.AddDocumentation();
+builder.AddServices();
+
+
 var app = builder.Build();
 
-builder.Services.AddDbContext<AppDbContext>
-     (x => x.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+if (app.Environment.IsDevelopment())
+      app.ConfigureDevEnvironment();
 
-builder.Services.AddTransient<ITransactionHandler, TransactionHandler>();
-builder.Services.AddTransient<ICategoryHandler, CategoryHandler>();
-
-app.MapGet("/", () => "Hello World!");
+app.UseCors(ApiConfigurtion.CorsPolicyName);
+app.MapEndpoints();
 
 app.Run();

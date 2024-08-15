@@ -76,7 +76,7 @@ namespace Fina.Api.Handlers
             }
             catch
             {
-                return new PagedResponse<List<Category>?>(null,0);
+                return new PagedResponse<List<Category>?>(null, message : "Não foi possível consultar as categorias");
             }
         }
 
@@ -108,16 +108,14 @@ namespace Fina.Api.Handlers
                 if (category is null)
                     return new Response<Category?>(null, 404, "Categoria não encontrada");
 
-                var data = new Category
-                {
-                    Title = category.Title,
-                    Description = category.Description,
-                };
+                 category.Title = request.Title;
+                 category.Description = request.Description;
 
-                context.Categories.Update(data);
+
+                context.Categories.Update(category);
                 await context.SaveChangesAsync();
 
-                return new Response<Category?>(data, message: "Categoria Atualizada com Sucesso!!!");
+                return new Response<Category?>(category, message: "Categoria Atualizada com Sucesso!!!");
             }
             catch
             {
