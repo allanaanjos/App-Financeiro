@@ -20,7 +20,7 @@ namespace Fina.Web.Handlers
         {
             var result = await http.DeleteAsync($"v1/categories/{request.Id}");
             return await result.Content.ReadFromJsonAsync<Response<Category?>>()
-             ?? new Response<Category?>(null, 400, "Falha ao deletar categ");
+             ?? new Response<Category?>(null, 400, "Falha ao deletar a categoria");
         }
         public async Task<PagedResponse<List<Category>?>> GetAllAsync(GetAllCategoriesRequest request)
          => await http.GetFromJsonAsync<PagedResponse<List<Category>?>>("v1/categories")
